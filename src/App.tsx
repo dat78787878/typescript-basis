@@ -2,8 +2,11 @@ import React, { FC, ChangeEvent, useState } from "react";
 import "./App.css";
 import TodoTask from "./components/TodoTask";
 import { ITask } from "./Interfaces";
-
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const App: FC = () => {
+  const notifyS = () => toast.success("Success");
+  const notifyF = () => toast.error("Please enter in the box");
   const [task, setTask] = useState<string>("");
   const [deadline, setDealine] = useState<number>(0);
   const [todoList, setTodoList] = useState<ITask[]>([]);
@@ -18,9 +21,15 @@ const App: FC = () => {
 
   const addTask = (): void => {
     const newTask = { taskName: task, deadline: deadline };
-    setTodoList([...todoList, newTask]);
-    setTask("");
-    setDealine(0);
+    if (newTask.taskName !== "") {
+      setTodoList([...todoList, newTask]);
+      setTask("");
+      setDealine(0);
+      notifyS()
+    }
+    else{
+      notifyF()
+    }
   };
 
   const completeTask = (taskNameToDelete: string): void => {
@@ -33,6 +42,7 @@ const App: FC = () => {
 
   return (
     <div className="App">
+      <ToastContainer />
       <div className="header">
         <div className="inputContainer">
           <input
